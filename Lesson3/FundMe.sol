@@ -40,7 +40,7 @@ contract FundMe {
 
     // function withdraw(){}
 
-    // 0: int256: 263752264930
+    // 0: int256: 263752264930 = $2637.52264930
     function getEthUsdPrice() public view returns (int256) {
         (
             /* uint80 roundID */,
