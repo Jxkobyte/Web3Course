@@ -8,7 +8,7 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 // set minimum funding value in usd 
 contract FundMe {
     
-    uint256 public minimumUSD = 50;
+    uint256 public minimumUSD = 50 * 1e18;
 
 
     AggregatorV3Interface internal dataFeed;
@@ -34,14 +34,14 @@ contract FundMe {
         // gas spent before the require statement will be used up
         // require(msg.value > 1e18, "Didn't send enough funds!"); // 1 * e^18 for wei to eth
 
-        require(msg.value >= minimumUSD, "Please send at least $50usd worth of eth");
+        require(getConversionRate(msg.value) >= minimumUSD, "Please send at least $50usd worth of eth");
 
     }
 
     // function withdraw(){}
 
-    // 0: int256: 263752264930 = $2637.52264930
-    function getEthUsdPrice() public view returns (int256) {
+    // 0: int256: 263752264930
+    function getEthUsdPrice() public view returns (uint256) {
         (
             /* uint80 roundID */,
             int answer,
@@ -49,7 +49,14 @@ contract FundMe {
             /*uint timeStamp*/,
             /*uint80 answeredInRound*/
         ) = dataFeed.latestRoundData();
-        return answer;
+        return uint256(answer * 1e10);
+    }
+
+
+    function getConversionRate(uint256 ethAmount) public view returns (uint256) {
+        uint256 ethPrice = getEthUsdPrice();
+        uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1e18;
+        return ethAmountInUsd;
     }
 
 }
