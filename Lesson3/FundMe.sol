@@ -1,27 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import "./PriceConverter.sol";
 
 // withdraw funds
 // receive funds
 // set minimum funding value in usd 
 contract FundMe {
+    using PriceConverter for uint256;
     
     uint256 public minimumUSD = 50 * 1e18;
 
+    address[] public funders;
 
-    AggregatorV3Interface internal dataFeed;
-    /**
-     * Network: Sepolia
-     * Aggregator: ETH/USD
-     * Address: 0x694AA1769357215DE4FAC081bf1f309aDC325306
-     */
+    mapping(address => uint256) public addressToAmountFunded; 
 
-    constructor () {
-        dataFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
-    }
-    
 
     function fund() public payable {
         // users send additional funds in wei
@@ -34,29 +27,15 @@ contract FundMe {
         // gas spent before the require statement will be used up
         // require(msg.value > 1e18, "Didn't send enough funds!"); // 1 * e^18 for wei to eth
 
-        require(getConversionRate(msg.value) >= minimumUSD, "Please send at least $50usd worth of eth");
+        require(msg.value.getConversionRate() >= minimumUSD, "Please send at least $50usd worth of eth");
 
+        funders.push(msg.sender);
+
+        addressToAmountFunded[msg.sender] = msg.value; // could be += to account for multiple donations
     }
 
     // function withdraw(){}
 
-    // 0: int256: 263752264930
-    function getEthUsdPrice() public view returns (uint256) {
-        (
-            /* uint80 roundID */,
-            int answer,
-            /*uint startedAt*/,
-            /*uint timeStamp*/,
-            /*uint80 answeredInRound*/
-        ) = dataFeed.latestRoundData();
-        return uint256(answer * 1e10);
-    }
-
-
-    function getConversionRate(uint256 ethAmount) public view returns (uint256) {
-        uint256 ethPrice = getEthUsdPrice();
-        uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1e18;
-        return ethAmountInUsd;
-    }
+    
 
 }
