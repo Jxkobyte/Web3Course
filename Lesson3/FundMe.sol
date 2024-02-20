@@ -15,6 +15,11 @@ contract FundMe {
 
     mapping(address => uint256) public addressToAmountFunded; 
 
+    address public owner;
+
+    constructor() {
+        owner = msg.sender;
+    }
 
     function fund() public payable {
         // users send additional funds in wei
@@ -34,17 +39,35 @@ contract FundMe {
         addressToAmountFunded[msg.sender] = msg.value; // could be += to account for multiple donations
     }
 
-    function withdraw() public {
+    function withdraw() public onlyOwner {
+        // require(msg.sender == owner, "You are not the owner");
         // reset array
         for (uint256 i = 0; i < funders.length; i++) {
             address funder = funders[i];
             addressToAmountFunded[funder] = 0;
         }
+
+        
+        // remove addresses from funder mapping
+        funders = new address[](0);
+
+        // https://solidity-by-example.org/sending-ether/ 
+        // withdraw funds
+        // transfer
+        payable(msg.sender).transfer(address(this).balance);
+        // send
+        bool sendSuccess = payable(msg.sender).send(address(this).balance);
+        require(sendSuccess, "Send failed");
+        // call
+        (bool callSuccess, /*bytes memory dataReturned*/) = payable(msg.sender).call{
+            value: address(this).balance
+        }("");
+        require(callSuccess, "Call failed");
     }
-
-    // remove addresses from funder mapping
-    // withdraw funds
-
     
+    modifier onlyOwner {
+        require(msg.sender == owner, "You are not the owner");
+        _; // underscore represents the function code
+    }
 
 }
