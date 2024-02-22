@@ -6,19 +6,25 @@ import "./PriceConverter.sol";
 // withdraw funds
 // receive funds
 // set minimum funding value in usd 
+
+error NotOwner();
+
+// current execution cost: 722,776 gas
+// with immutable and constant variables: 680,375 gas
 contract FundMe {
     using PriceConverter for uint256;
     
-    uint256 public minimumUSD = 50 * 1e18;
+    uint256 public constant MINIMUM_USD = 50 * 1e18;
+    // constant variable saves gas
 
     address[] public funders;
 
     mapping(address => uint256) public addressToAmountFunded; 
 
-    address public owner;
+    address public immutable i_owner;
 
     constructor() {
-        owner = msg.sender;
+        i_owner = msg.sender;
     }
 
     function fund() public payable {
@@ -32,7 +38,7 @@ contract FundMe {
         // gas spent before the require statement will be used up
         // require(msg.value > 1e18, "Didn't send enough funds!"); // 1 * e^18 for wei to eth
 
-        require(msg.value.getConversionRate() >= minimumUSD, "Please send at least $50usd worth of eth");
+        require(msg.value.getConversionRate() >= MINIMUM_USD, "Please send at least $50usd worth of eth");
 
         funders.push(msg.sender);
 
@@ -66,8 +72,11 @@ contract FundMe {
     }
     
     modifier onlyOwner {
-        require(msg.sender == owner, "You are not the owner");
+        // require(msg.sender == i_owner, "You are not the owner");
+        if (msg.sender != i_owner) { revert NotOwner();}
         _; // underscore represents the function code
     }
 
+    // receive and fallback special functions
+    
 }
