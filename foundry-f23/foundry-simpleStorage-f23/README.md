@@ -1,3 +1,28 @@
+forge script script/DeploySimpleStorage.s.sol --rpc-url [http://localhost:8545](http://localhost:8545/) --account defaultKey --sender 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266 --broadcast
+
+cast --to-base 0x7170b dec
+
+cast wallet import defaultKey --interactive
+
+cast send 0x5FbDB2315678afecb367f032d93F642f64180aa3 "store(uint256)" 123 --rpc-url [http://localhost:8545](http://localhost:8545/) --account defaultKey
+
+cast call 0x5FbDB2315678afecb367f032d93F642f64180aa3 "retrieve()”
+
+source .env # load env variables into shell
+
+forge script script/DeploySimpleStorage.s.sol --rpc-url $SEPOLIA_RPC_URL --account sepoliaKey --broadcast
+
+
+
+
+
+
+
+
+
+
+
+
 ## Foundry
 
 **Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
