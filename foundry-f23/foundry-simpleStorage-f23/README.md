@@ -12,7 +12,7 @@ source .env # load env variables into shell
 
 forge script script/DeploySimpleStorage.s.sol --rpc-url $SEPOLIA_RPC_URL --account sepoliaKey --broadcast
 
-
+forge fmt - formats files
 
 
 
