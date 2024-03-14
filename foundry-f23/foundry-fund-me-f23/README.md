@@ -1,3 +1,10 @@
+forge test -vv
+forge script script/DeployFundMe.s.sol
+forge test --match-test testPriceFeedVersion -vvv
+forge test --match-test testPriceFeedVersion -vvvv --fork-url $SEPOLIA_RPC_URL
+forge coverage --fork-url $SEPOLIA_RPC_URL ## how much code is tested
+
+
 ## Foundry
 
 **Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
