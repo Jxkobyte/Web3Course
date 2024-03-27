@@ -4,6 +4,18 @@ forge test --match-test testPriceFeedVersion -vvv
 forge test --match-test testPriceFeedVersion -vvvv --fork-url $SEPOLIA_RPC_URL
 forge coverage --fork-url $SEPOLIA_RPC_URL ## how much code is tested
 
+source .env
+forge test --fork-url $SEPOLIA_RPC_URL
+
+Running tests...
+| File                      | % Lines       | % Statements  | % Branches    | % Funcs      |
+|---------------------------|---------------|---------------|---------------|--------------|
+| script/DeployFundMe.s.sol | 0.00% (0/3)   | 0.00% (0/3)   | 100.00% (0/0) | 0.00% (0/1)  |
+| src/FundMe.sol            | 16.67% (2/12) | 23.53% (4/17) | 0.00% (0/4)   | 25.00% (1/4) |
+| src/PriceConverter.sol    | 0.00% (0/6)   | 0.00% (0/11)  | 100.00% (0/0) | 0.00% (0/2)  |
+| Total                     | 9.52% (2/21)  | 12.90% (4/31) | 0.00% (0/4)   | 14.29% (1/7) |
+
+
 
 ## Foundry
 
