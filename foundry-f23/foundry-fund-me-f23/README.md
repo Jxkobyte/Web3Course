@@ -7,6 +7,8 @@ forge coverage --fork-url $SEPOLIA_RPC_URL ## how much code is tested
 source .env
 forge test --fork-url $SEPOLIA_RPC_URL
 
+mock test: forge test
+
 Running tests...
 | File                      | % Lines       | % Statements  | % Branches    | % Funcs      |
 |---------------------------|---------------|---------------|---------------|--------------|

@@ -11,15 +11,14 @@ import {DeployFundMe} from "script/DeployFundMe.s.sol";
 
 contract FundMeTest is Test {
     FundMe fundMe;
+
     function setUp() external {
         //fundMe = new FundMe(0x694AA1769357215DE4FAC081bf1f309aDC325306);
         DeployFundMe deployFundMe = new DeployFundMe();
         fundMe = deployFundMe.run();
     }
 
-
     function testMinimumDollarIsFive() public view {
-        
         assertEq(fundMe.MINIMUM_USD(), 5e18);
         console.log("testMinimumDollarIsFive \u2714");
     }
