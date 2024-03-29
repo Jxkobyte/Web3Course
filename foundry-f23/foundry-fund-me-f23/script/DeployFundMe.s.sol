@@ -12,7 +12,6 @@ contract DeployFundMe is Script {
 
         vm.startBroadcast(); // makes fundme msg.sender
 
-        // mock contract
 
         FundMe fundMe = new FundMe(priceFeed);
         vm.stopBroadcast();
