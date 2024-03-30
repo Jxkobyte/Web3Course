@@ -17,7 +17,19 @@ Running tests...
 | src/PriceConverter.sol    | 0.00% (0/6)   | 0.00% (0/11)  | 100.00% (0/0) | 0.00% (0/2)  |
 | Total                     | 9.52% (2/21)  | 12.90% (4/31) | 0.00% (0/4)   | 14.29% (1/7) |
 
+chisel // write solidity in the shell
 
+forge snapshot --mt testWithdrawWithMultipleFunders
+forge test --mt testWithdrawWithMultipleFunders -vv
+
+forge inspect FundMe storageLayout
+
+FundMeTest:testWithdrawWithMultipleFunders() (gas: 496562)
+FundMeTest:testWithdrawWithMultipleFundersCheaper() (gas: 495748)
+
+forge install Cyfrin/foundry-devops --no-commit
+
+forge script script/Interactions.s.sol:FundFundMe --rpc-url $RPC_URL --account defaultKey
 
 ## Foundry
 
